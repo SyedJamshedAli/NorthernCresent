@@ -1,17 +1,41 @@
 ﻿@model WebApplication.Models.UserRoleViewModel
 @{
     Layout = "~/Views/Shared/_CompanyLayout.cshtml";
-    
+
 }
 
 
 <div class="row">
 
+
+
+    <!-- Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>*@
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">Are you shure you want to delete</div>
+                <input type="text" hidden id="employeeId" value="" />
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancle</button>
+                    <button @*asp-controller="Account" asp-action="DeleteUser"*@ onclick="DeleteEmployee()"  type="button" class="btn btn-primary font-weight-bold">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!--begin::Container-->
     <div class="d-flex flex-row flex-column-fluid container">
         <!--begin::Content Wrapper-->
         <div class="main d-flex flex-column flex-row-fluid">
-           
+
             <div class="content flex-column-fluid" id="kt_content">
                 <!--begin::Dashboard-->
                 <!--begin::Row-->
@@ -39,7 +63,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleSelect2">select Role <span class="text-danger">*</span></label>
-                                        <select asp-for="@Model.RoleID" value="@Model.RoleName" name="RoleID"  class="form-control" id="exampleSelect2">
+                                        <select asp-for="@Model.RoleID" value="@Model.RoleName" name="RoleID" class="form-control" id="exampleSelect2">
                                             @if (Model.roles != null)
                                             {
                                                 @foreach (var item in Model.roles)
@@ -92,7 +116,7 @@
                                                             <td>@item.UserEmail</td>
                                                             <td>@item.RoleName</td>
                                                             <td>@item.Status</td>
-                                                            <td><a asp-controller="Account" asp-action="EditAssignRole" asp-route-id="@item.ID"><i class="fa fa-edit"></i></a><a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@item.ID"><i class="fa fa-trash ml-4"></i></a></td>
+                                                            <td><a asp-controller="Account" asp-action="EditAssignRole" asp-route-id="@item.ID"><i class="fa fa-edit"></i></a><a onclick="ConfirmDelete(@item.ID)" @*data-toggle="modal" data-target="#exampleModal" data-id="@item.ID"*@ @*asp-controller="Account" asp-action="DeleteUser" asp-route-id="@item.ID"*@><i class="fa fa-trash ml-4"></i></a></td>
                                                         </tr>
                                                     }
                                                 }
@@ -112,20 +136,12 @@
         <!--begin::Content Wrapper-->
     </div>
     <!--end::Container-->
-
-
-
-
-
-
-
-
     @*<div class="bg-active-white">
-        <div class="col-md-12 d-flex justify-content-center mt-10">
+            <div class="col-md-12 d-flex justify-content-center mt-10">
 
-     
-        </div>
-    </div>*@
+
+            </div>
+        </div>*@
 
 
 
@@ -144,9 +160,35 @@
         </div>
         <div class="col-xl-4"></div>*@
 </div>
-            <!--end::Row-->
-     
+<!--end::Row-->
 
+    <script>
+        var ConfirmDelete = function (EmployeeId) {
+
+            $("#employeeId").val(EmployeeId);
+            $("#exampleModal").modal('show');
+
+        }
+        var DeleteEmployee = function () {
+            var empId = $("#employeeId").val();
+
+            $.ajax({
+
+                type: "POST",
+                url: "/Account/DeleteUser",
+                data: { Id: empId },
+                success: function (result) {
+
+                    window.location.reload();
+
+                }
+
+            })
+        }
+
+
+
+        </script>
 
 
 

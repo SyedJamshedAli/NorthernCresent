@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string UserEmail { get; set; }
         public string Status { get; set; }
         public long RoleID { get; set; }
-       
+        public bool IsDeleted { get; set; }
+
     }
 }

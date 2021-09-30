@@ -36,6 +36,7 @@ namespace Infrastructure.Repositories
             List<GetuserAllData> user = new List<GetuserAllData>();
             user = (from role in db.roles
                     join userdata in db.userRoles on role.ID equals userdata.RoleID
+                    where userdata.IsDeleted != true
                     select new GetuserAllData
                     {
                         ID = userdata.ID,

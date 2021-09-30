@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,6 +101,13 @@ namespace WebApplication
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseRewriter(
+    new RewriteOptions().Add(
+        context => {
+            if (context.HttpContext.Request.Path == "/AzureAD/Account/SignedOut")
+            { context.HttpContext.Response.Redirect("/Home/MainPage"); }
+        })
+);
             //app.UseEndpoints(endpoints =>
             //{
             //    endpoints.MapControllers();

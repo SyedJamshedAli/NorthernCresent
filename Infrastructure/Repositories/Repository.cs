@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories
 
         public T GetById(int id)
         {
-            return entities.Find(id);
+            return entities.Find((long)id);
         }
 
         public void Insert(T entity)
@@ -53,6 +53,7 @@ namespace Infrastructure.Repositories
         public void Delete(long id)
         {
             T existing = entities.Find(id);
+            
             entities.Remove(existing);
             db.SaveChanges();
         }

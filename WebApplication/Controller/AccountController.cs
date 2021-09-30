@@ -200,12 +200,16 @@ namespace WebApplication.Controllers
         }
         public async Task<IActionResult> LogOut()
         {
+            foreach (var cookie in HttpContext.Request.Cookies)
+            {
+                Response.Cookies.Delete(cookie.Key);
+            }
             //await _signInManager.SignOutAsync();
-            var user = User as ClaimsPrincipal;
-            var identity = user.Identity as ClaimsIdentity;
-            var name = identity.FindFirst("Name");
-            //var claims = identity.Claims;
-            identity.RemoveClaim(name);
+            //var user = User as ClaimsPrincipal;
+            //var identity = user.Identity as ClaimsIdentity;
+            //var name = identity.FindFirst("Name");
+            ////var claims = identity.Claims;
+            //identity.RemoveClaim(name);
             HttpContext.Session.Clear();
 
             return RedirectToAction("MainPage", "Home");

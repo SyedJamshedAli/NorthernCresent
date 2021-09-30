@@ -28,6 +28,7 @@ namespace WebAPI.Controllers
         private IConfiguration _configuration;
         private IRepository<ApplicationUser> _eventRepository;
         private IRepository<tblUserRole> _repository;
+
         private IUser _User;
         public AccountController(/*UserManager<ApplicationUser> userManager,*/ RoleManager<IdentityRole> roleManager, IConfiguration configuration, /*SignInManager<ApplicationUser> signInManager,*/ IRepository<ApplicationUser> eventRepository, IUser user, IRepository<tblUserRole> repository)
         {
@@ -157,6 +158,7 @@ namespace WebAPI.Controllers
                 }
                 else
                 {
+                    userRole.IsDeleted = false;
                     _repository.Insert(userRole);
                 }
                 return userRole;
@@ -193,7 +195,9 @@ namespace WebAPI.Controllers
         [HttpGet("DeleteUser/{id}")]
         public void DeleteUser(long id)
         {
-             _repository.Delete(id);
+            var data = _repository.GetById((int)id);
+            data.IsDeleted = true;
+             _repository.Update(data);
         }
     }
 }
